@@ -1,7 +1,7 @@
 #!/command/with-contenv bashio
 # ==============================================================================
-# Home Assistant Community Add-on: InfluxDB
-# Configures InfluxDB
+# Home Assistant Community Add-on: InfluxDBv2
+# Configures InfluxDBv2
 # ==============================================================================
 
 # Configures authentication

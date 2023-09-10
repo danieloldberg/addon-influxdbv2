@@ -6,7 +6,7 @@ description: Scalable datastore for metrics, events, and real-time analytics
 url: https://github.com/hassio-addons/addon-influxdb
 codenotary: codenotary@frenck.dev
 ingress: true
-ingress_port: 1338
+ingress_port: 1337
 ingress_stream: true
 panel_icon: mdi:chart-areaspline
 startup: services
@@ -23,8 +23,8 @@ map:
   - ssl
 ports:
   80/tcp: null
-  8086/tcp: 8087
-  8088/tcp: 8089
+  8086/tcp: 8086
+  8088/tcp: 8088
 ports_description:
   80/tcp: Web interface (Not required for Ingress)
   8087/tcp: InfluxDB server

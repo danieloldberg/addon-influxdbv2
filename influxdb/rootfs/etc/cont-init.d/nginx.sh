@@ -1,6 +1,6 @@
 #!/command/with-contenv bashio
 # ==============================================================================
-# Home Assistant Community Add-on: InfluxDB
+# Home Assistant Community Add-on: InfluxDBv2
 # Configures NGINX for use with the Chronograf
 # ==============================================================================
 declare port

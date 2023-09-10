@@ -13,10 +13,7 @@ secret=$(</data/secret)
 # Wait for InfluxDB...
 bashio::log.info "Kapacitor is waiting until InfluxDB is available..."
 for i in {1800..0}; do
-    if influx \
-        -execute "SHOW DATABASES" \
-        -username "kapacitor" \
-        -password "${secret}" \
+    if influx ping \
         > /dev/null 2>&1; then
         break;
     fi

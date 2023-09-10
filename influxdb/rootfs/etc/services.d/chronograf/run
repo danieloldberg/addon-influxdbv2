@@ -18,11 +18,9 @@ secret=$(</data/secret)
 
 # Wait for InfluxDB...
 bashio::log.info "Chronograf is waiting until InfluxDB is available..."
+# for i in {1800..0}; do
 for i in {1800..0}; do
-    if influx \
-        -execute "SHOW DATABASES" \
-        -username "chronograf" \
-        -password "${secret}" \
+    if influx ping \
         > /dev/null 2>&1; then
         break;
     fi
@@ -40,8 +38,10 @@ options+=(--port=8889)
 options+=(--bolt-path=/data/chronograf.db)
 options+=(--influxdb-url="http://localhost:8086")
 
-options+=(--influxdb-username="chronograf")
-options+=(--influxdb-password="${secret}")
+#options+=(--influxdb-username="chronograf")
+#options+=(--influxdb-password="${secret}")
+options+=(--influxdb-org="homeassistant")
+options+=(--influxdb-token="${secret}")
 options+=(--kapacitor-url="http://localhost:9092")
 
 # Find the matching Chronograph log level
