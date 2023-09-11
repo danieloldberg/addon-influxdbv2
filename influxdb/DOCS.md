@@ -1,14 +1,12 @@
-# Home Assistant Community Add-on: InfluxDB
+# Add-on: InfluxDB v2
 
-InfluxDB is an open source time series database optimized for high-write-volume.
+InfluxDB v2 is an open source time series database optimized for high-write-volume.
 It's useful for recording metrics, sensor data, events,
 and performing analytics. It exposes an HTTP API for client interaction and is
 often used in combination with Grafana to visualize the data.
 
-This add-on comes with Chronograf & Kapacitor pre-installed as well. Which
-gives you a nice InfluxDB admin interface for managing your users, databases,
-data retention settings, and lets you peek inside the database using the
-Data Explorer.
+InfluxDB v2 comes with its own admin interface for managing your users, databases,
+data retention settings, and lets you peek inside the database.
 
 ## Installation
 
@@ -21,7 +19,7 @@ comparison to installing any other Home Assistant add-on.
    [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
 
 1. Click the "Install" button to install the add-on.
-1. Start the "InfluxDB" add-on.
+1. Start the "InfluxDB v2" add-on.
 1. Check the logs of the "InfluxDB" to see if everything went well.
 1. Click the "OPEN WEB UI" button!
 
@@ -115,15 +113,6 @@ The name of the environment variable to set which must start with `INFLUXDB_`
 The value of the environment variable to set, set the Influx documentation for
 full details. Values should always be entered as a string (even true/false values).
 
-### Option: `leave_front_door_open`
-
-Adding this option to the add-on configuration allows you to disable
-authentication on the Web Terminal by setting it to `true` and leaving the
-username and password empty.
-
-**Note**: _We STRONGLY suggest, not to use this, even if this add-on is
-only exposed to your internal network. USE AT YOUR OWN RISK!_
-
 ## Integrating into Home Assistant
 
 The `influxdb` integration of Home Assistant makes it possible to transfer all
@@ -145,7 +134,7 @@ Now we've got this in place, add the following snippet to your Home Assistant
 ```yaml
 influxdb:
   host: a0d7b954-influxdb
-  port: 8087
+  port: 8086
   database: homeassistant
   username: homeassistant
   password: <yourpassword>
