@@ -1,0 +1,4 @@
+# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
+name: Influxdb V2 Repository
+url: 'https://github.com/danieloldberg/addon-influxdbv2/'
+maintainer: Daniel Oldberg <contact@danieloldberg.se>
