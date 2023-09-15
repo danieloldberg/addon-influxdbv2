@@ -1,4 +1,4 @@
-# Home Assistant Community Add-on: InfluxDB
+# Home Assistant Community Add-on: InfluxDB v2
 
 [![GitHub Release][releases-shield]][releases]
 ![Project Stage][project-stage-shield]
@@ -30,59 +30,25 @@ It's useful for recording metrics, sensor data, events,
 and performing analytics. It exposes an HTTP API for client interaction and is
 often used in combination with Grafana to visualize the data.
 
-![Chronograf in the Home Assistant Frontend](images/screenshot.png)
+![InfluxDB v2 frontend](images/screenshot.png)
 
-This add-on comes with Chronograf & Kapacitor pre-installed as well. Which
-gives you a nice InfluxDB admin interface for managing your users, databases,
+Compared to InfluxDB v1, v2 comes with a graphical administration interface which
+gives you management capabilities of users, databases,
 data retention settings, and lets you peek inside the database using the
 Data Explorer.
 
 [:books: Read the full add-on documentation][docs]
 
-## Support
-
-Got questions?
-
-You have several options to get them answered:
-
-- The [Home Assistant Community Add-ons Discord chat server][discord] for add-on
-  support and feature requests.
-- The [Home Assistant Discord chat server][discord-ha] for general Home
-  Assistant discussions and questions.
-- The Home Assistant [Community Forum][forum].
-- Join the [Reddit subreddit][reddit] in [/r/homeassistant][reddit]
-
-You could also [open an issue here][issue] GitHub.
-
-## Contributing
-
-This is an active open-source project. We are always open to people who want to
-use the code or contribute to it.
-
-We have set up a separate document containing our
-[contribution guidelines](.github/CONTRIBUTING.md).
-
-Thank you for being involved! :heart_eyes:
-
 ## Authors & contributors
 
-The original setup of this repository is by [Franck Nijhof][frenck].
-
-For a full list of all authors and contributors,
-check [the contributor's page][contributors].
-
-## We have got some Home Assistant add-ons for you
-
-Want some more functionality to your Home Assistant instance?
-
-We have created multiple add-ons for Home Assistant. For a full list, check out
-our [GitHub Repository][repository].
+Author of this repository is [Daniel Oldberg][danieloldberg].
+Huge credits to [Franck Nijhof][frenck] and Home assistant community for their work on the original InfluxDB project that was used as a baseline.
 
 ## License
 
 MIT License
 
-Copyright (c) 2018-2023 Franck Nijhof
+Copyright (c) 2018-2023
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

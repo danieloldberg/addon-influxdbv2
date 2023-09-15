@@ -31,19 +31,19 @@ ports_description:
   # 8088/tcp: RPC service for backup and restore
 auth_api: true
 options:
-  auth: true
-  reporting: true
-  ssl: true
-  certfile: fullchain.pem
-  keyfile: privkey.pem
+  # auth: true
+  # reporting: true
+  # ssl: true
+  # certfile: fullchain.pem
+  # keyfile: privkey.pem
   envvars: []
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
-  auth: bool
-  reporting: bool
-  ssl: bool
-  certfile: str
-  keyfile: str
+  #auth: bool
+  #reporting: bool
+  #ssl: bool
+  #certfile: str
+  #keyfile: str
   envvars:
     - name: match(^INFLUXDB_([A-Z0-9_])+$)
       value: str

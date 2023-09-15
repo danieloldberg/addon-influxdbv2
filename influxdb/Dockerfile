@@ -5,21 +5,16 @@ FROM ${BUILD_FROM}
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY tmp /tmp
-
 # Setup base system
 ARG BUILD_ARCH=amd64
 ARG INFLUXDB_VERSION="2.7.0"
 ARG INFLUXCLI_VERSION="2.7.3"
 ARG TRAEFIK_VERSION="2.10.4"
 
-
 RUN \
     apt-get update \
     && apt-get install -y --no-install-recommends \
-        #libnginx-mod-http-lua=1.18.0-6.1+deb11u3 \
         luarocks=2.4.2+dfsg-1.1 \
-        # nginx=1.18.0-6.1+deb11u3 \
         procps=2:3.3.17-5 \
     \
     && luarocks install lua-resty-http 0.15-0 \
@@ -28,7 +23,7 @@ RUN \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     && if [ "${BUILD_ARCH}" = "armv7" ]; then ARCH="armhf"; fi \
     \
-    
+
     && curl -J -L -o /tmp/influxdb.deb \
         "https://dl.influxdata.com/influxdb/releases/influxdb2-${INFLUXDB_VERSION}-${ARCH}.deb" \
     \
@@ -85,13 +80,13 @@ LABEL \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
-    maintainer="Franck Nijhof <frenck@addons.community>" \
+    maintainer="Daniel Oldberg <contact@danieloldberg.se>" \
     org.opencontainers.image.title="${BUILD_NAME}" \
     org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
-    org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
-    org.opencontainers.image.authors="Franck Nijhof <frenck@addons.community>" \
+    org.opencontainers.image.vendor="" \
+    org.opencontainers.image.authors="Daniel Oldberg <contact@danieloldberg.se>" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https://addons.community" \
+    org.opencontainers.image.url="https://github.com/danieloldberg/addon-influxdbv2" \
     org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
     org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
     org.opencontainers.image.created=${BUILD_DATE} \
