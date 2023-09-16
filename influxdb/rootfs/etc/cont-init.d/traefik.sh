@@ -5,7 +5,6 @@
 # ==============================================================================
 declare port
 declare certfile
-declare dns_host
 declare ingress_interface
 declare ingress_port
 declare ingress_entry
@@ -25,4 +24,3 @@ sed -i "s/%%ingress_port%%/${ingress_port}/g" /etc/traefik/traefik.yaml
 sed -i "s/%%port%%/${port}/g" /etc/traefik/traefik.yaml
 sed -i "s/%%interface%%/${ingress_interface}/g" /etc/traefik/traefik.yaml
 sed -i "s#%%ingress_entry%%#${ingress_entry}#g" /etc/traefik/traefik.yaml
-
