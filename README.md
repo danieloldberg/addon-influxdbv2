@@ -18,6 +18,10 @@ Data Explorer.
 
 [Read the full add-on documentation](https://github.com/danieloldberg/addon-influxdbv2/blob/main/influxdb/DOCS.md)
 
+## Known issues and limitations
+
+- This InfluxDB v2 addon currently does not support Home Assistant web access, in other terms the ingress. Reason is that InfluxDB v2 does not support path-based reverse proxies, leading to technical challenges.
+
 ## Authors & contributors
 
 Author of this repository is [Daniel Oldberg](https://github.com/danieloldberg/).
