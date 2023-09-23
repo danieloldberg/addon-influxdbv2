@@ -1,6 +1,6 @@
 ---
 name: InfluxDB v2
-version: dev
+version: v0.0.1
 slug: influxdbv2
 description: Scalable datastore for metrics, events, and real-time analytics
 url: https://github.com/danieloldberg/addon-influxdbv2/
