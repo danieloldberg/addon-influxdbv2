@@ -2,9 +2,9 @@ providers:
   file:
     filename: "/etc/traefik/traefik.yaml"
 
-api:
-  dashboard: true
-  insecure: true
+# api:
+  # dashboard: true
+  # insecure: true
 
 entryPoints:
   ingress:
@@ -20,39 +20,39 @@ entryPoints:
 
 http:
   routers:
-    dashboard:
-      rule: "PathPrefix(`/api`, `/dashboard`)"
-      service: api@internal
+    # dashboard:
+    #   rule: "PathPrefix(`/api`, `/dashboard`)"
+    #   service: api@internal
     influxDbIngressRouter:
       entryPoints:
         - ingress
       rule: "ClientIP(`172.30.32.2/32`)"
-      service: influxdb
-      middlewares:
-        - rewritebody
+      service: influxdb@file
+      # middlewares:
+      #   - rewritebody
     influxDbDirectRouter:
       entryPoints:
         - direct
       rule: "Host(`0.0.0.0/0`)"
-      service: influxdb
-      middlewares:
-        - rewritebody
+      service: influxdb@file
+      # middlewares:
+      #   - rewritebody
   services:
     influxdb:
       loadBalancer:
         servers:
-          - url: http://127.0.0.1:8086/
-    rewritebody:
-      plugin:
-        plugin-rewritebody:
-          lastModified: "true"
-          rewrites:
-            - regex: src="/
-              replacement: src="%%ingress_entry%%/
-            - regex: =e\?"
-              replacement: =e?"%%ingress_entry%%/
-            - regex: href="/
-              replacement: href="%%ingress_entry%%/
+          - url: http://127.0.0.1:9876/
+    # rewritebody:
+    #   plugin:
+    #     plugin-rewritebody:
+    #       lastModified: "true"
+    #       rewrites:
+    #         - regex: src="/
+    #           replacement: src="%%ingress_entry%%/
+    #         - regex: =e\?"
+              # replacement: =e?"%%ingress_entry%%/
+            #- regex: href="/
+              #replacement: href="%%ingress_entry%%/
             #- regex: data-basepath="
             #replacement: data-basepath="%%ingress_entry%%/
             #- regex: n.p="/"
@@ -67,21 +67,21 @@ http:
             #replacement: )}%%ingress_entry%%/health
           # logLevel is optional, defaults to Info level.
           # Available logLevels: (Trace: -2, Debug: -1, Info: 0, Warning: 1, Error: 2)
-          logLevel: -1
+          # logLevel: -1
 
-          # monitoring is optional, defaults to below configuration
-          # monitoring configuration limits the HTTP queries that are checked for regex replacement.
-          monitoring:
-            # methods is a string list. Options are standard HTTP Methods. Entries MUST be ALL CAPS
-            # For a list of options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
-            methods:
-              - GET
-            # types is a string list. Options are HTTP Content Types. Entries should match standard formatting
-            # For a list of options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
-            # Wildcards(*) are not supported!
-            types:
-              - text/html
-              - text/javascript
+          # # monitoring is optional, defaults to below configuration
+          # # monitoring configuration limits the HTTP queries that are checked for regex replacement.
+          # monitoring:
+          #   # methods is a string list. Options are standard HTTP Methods. Entries MUST be ALL CAPS
+          #   # For a list of options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+          #   methods:
+          #     - GET
+          #   # types is a string list. Options are HTTP Content Types. Entries should match standard formatting
+          #   # For a list of options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+          #   # Wildcards(*) are not supported!
+          #   types:
+          #     - text/html
+          #     - text/javascript
 
 tls:
   certificates:
@@ -101,8 +101,8 @@ log:
 accessLog:
   filePath: "/data/traefik/traefik-access.log"
 
-experimental:
-  plugins:
-    plugin-rewritebody:
-      moduleName: "github.com/packruler/rewrite-body"
-      version: "v1.1.0"
+#experimental:
+#  plugins:
+#    plugin-rewritebody:
+#      moduleName: "github.com/packruler/rewrite-body"
+#      version: "v1.1.0"

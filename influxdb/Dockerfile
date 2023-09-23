@@ -62,6 +62,7 @@ WORKDIR /etc/influxdb
 ENV INFLUXD_CONFIG_PATH=/etc/influxdb
 ENV INFLUXD_ENGINE_PATH=data/influxdb/data
 ENV INFLUXD_BOLT_PATH=/data/influxdb/influxd.bolt
+ENV INFLUXD_HTTP_BIND_ADDRESS=0.0.0.0:8086
 ENV INFLUXD_LOG_LEVEL=info
 
 # Build arguments

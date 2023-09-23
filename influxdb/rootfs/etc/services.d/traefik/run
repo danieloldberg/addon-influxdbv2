@@ -2,11 +2,13 @@
 # ==============================================================================
 # Home Assistant Community Add-on: InfluxDB
 # Runs the Traefik daemon
+
+# CURRENTLY DISABLED
 # ==============================================================================
 # Wait for InfluxDB to become available
 # bashio::net.wait_for 8889 localhost 9000
-bashio::net.wait_for 8086 localhost 9000
+#bashio::net.wait_for 8087 localhost 9000
 
-bashio::log.info "Starting Traefik..."
+#bashio::log.info "Starting Traefik..."
 
-exec traefik
+# exec traefik

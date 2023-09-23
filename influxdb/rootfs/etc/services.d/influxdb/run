@@ -13,7 +13,7 @@ for envvar in $(bashio::config 'envvars|keys'); do
     export "${name}=${value}"
 done
 
-bashio::log.info 'Starting the InfluxDB...'
+# bashio::log.info 'Starting the InfluxDB...'
 
 # Run InfluxDB
 exec influxd
