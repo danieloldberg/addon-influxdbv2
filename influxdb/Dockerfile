@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base system
 ARG BUILD_ARCH=amd64
-ARG INFLUXDB_VERSION="2.7.0"
+ARG INFLUXDB_VERSION="2.7.1"
 ARG INFLUXCLI_VERSION="2.7.3"
 ARG TRAEFIK_VERSION="2.10.4"
 
