@@ -1,5 +1,7 @@
 # Add-on: InfluxDB v2
 
+InfluxDB v2 in Home Assistant, **almost** just like the https://community.home-assistant.io/t/home-assistant-community-add-on-influxdb/54491.
+
 InfluxDB v2 is an open source time series database optimized for high-write-volume.
 It's useful for recording metrics, sensor data, events,
 and performing analytics. It exposes an HTTP API for client interaction and is
@@ -10,8 +12,7 @@ data retention settings, and lets you peek inside the database.
 
 ## Installation
 
-The installation of this add-on is pretty straightforward and not different in
-comparison to installing any other Home Assistant add-on.
+The installation of this add-on is pretty straightforward and not different in comparison to installing any other Home Assistant add-on.
 
 1. Click the Home Assistant My button below to open the add-on on your Home
    Assistant instance.
@@ -21,131 +22,64 @@ comparison to installing any other Home Assistant add-on.
 1. Click the "Install" button to install the add-on.
 1. Start the "InfluxDB v2" add-on.
 1. Check the logs of the "InfluxDB" to see if everything went well.
-1. Click the "OPEN WEB UI" button!
 
 ## Configuration
 
 **Note**: _Remember to restart the add-on when the configuration is changed._
 
+Currently only supports HTTP and limited configuration options. SSL/TLS & other options are in the backlog.
+
 Example add-on configuration:
 
 ```yaml
-log_level: info
-auth: true
-reporting: true
-ssl: true
-certfile: fullchain.pem
-keyfile: privkey.pem
-envvars:
-  - name: INFLUXDB_HTTP_LOG_ENABLED
-    value: "true"
+Ports:
+  - InfluxDB server: 8086 (8086/tcp)
 ```
-
-**Note**: _This is just an example, don't copy and paste it! Create your own!_
-
-### Option: `log_level`
-
-The `log_level` option controls the level of log output by the addon and can
-be changed to be more or less verbose, which might be useful when you are
-dealing with an unknown issue. Possible values are:
-
-- `trace`: Show every detail, like all called internal functions.
-- `debug`: Shows detailed debug information.
-- `info`: Normal (usually) interesting events.
-- `warning`: Exceptional occurrences that are not errors.
-- `error`: Runtime errors that do not require immediate action.
-- `fatal`: Something went terribly wrong. Add-on becomes unusable.
-
-Please note that each level automatically includes log messages from a
-more severe level, e.g., `debug` also shows `info` messages. By default,
-the `log_level` is set to `info`, which is the recommended setting unless
-you are troubleshooting.
-
-### Option: `auth`
-
-Enable or disable InfluxDB user authentication.
-
-**Note**: _Turning this off is NOT recommended!_
-
-### Option: `reporting`
-
-This option allows you to disable the reporting of usage data to InfluxData.
-
-**Note**: _No data from user databases is ever transmitted!_
-
-### Option: `ssl`
-
-Enables/Disables SSL (HTTPS) on the web interface.
-Set it `true` to enable it, `false` otherwise.
-
-**Note**: _This does NOT activate SSL for InfluxDB, just the web interface_
-
-### Option: `certfile`
-
-The certificate file to use for SSL.
-
-**Note**: _The file MUST be stored in `/ssl/`, which is the default_
-
-### Option: `keyfile`
-
-The private key file to use for SSL.
-
-**Note**: _The file MUST be stored in `/ssl/`, which is the default_
-
-### Option: `envvars`
-
-This allows the setting of Environment Variables to control InfluxDB
-configuration as documented at:
-
-<https://docs.influxdata.com/influxdb/v1.7/administration/config/#configuration-settings>
-
-**Note**: _Changing these options can possibly cause issues with you instance.
-USE AT YOUR OWN RISK!_
-
-These are case sensitive.
-
-#### Sub-option: `name`
-
-The name of the environment variable to set which must start with `INFLUXDB_`
-
-#### Sub-option: `value`
-
-The value of the environment variable to set, set the Influx documentation for
-full details. Values should always be entered as a string (even true/false values).
 
 ## Integrating into Home Assistant
 
-The `influxdb` integration of Home Assistant makes it possible to transfer all
-state changes to an InfluxDB database.
+The `influxdb` integration of Home Assistant makes it possible to transfer all state changes to an InfluxDB database.
 
 You need to do the following steps in order to get this working:
 
-- Click on "OPEN WEB UI" to open the admin web-interface provided by this add-on.
-- On the left menu click on the "InfluxDB Admin".
-- Create a database for storing Home Assistant's data in, e.g., `homeassistant`.
-- Go to the users tab and create a user for Home Assistant,
-  e.g., `homeassistant`.
-- Add "ALL" to "Permissions" of the created user, to allow writing to your
-  database.
+- Browse to http://{{ HOME_ASSISTANT_URL }}:8086 `(replace {{ HOME_ASSISTANT_URL }} with the address to your home assistant installation)`
+- Go through the onboarding process by creating a default user, password, organization and bucket.
+- Save the operator token for future use. Note: It's best to create a separate user and token to be used in home assistant. Operator token has unlimited permissions to your InfluxDB installation.
 
-Now we've got this in place, add the following snippet to your Home Assistant
-`configuration.yaml` file.
+Now we've got this in place, add the following snippet to your Home Assistant `configuration.yaml` file.
 
 ```yaml
 influxdb:
+  api_version: 2
+  ssl: false
   host: a0d7b954-influxdb
   port: 8086
-  database: homeassistant
-  username: homeassistant
-  password: <yourpassword>
-  max_retries: 3
-  default_measurement: state
+  token: GENERATED_AUTH_TOKEN
+  organization: RANDOM_16_DIGIT_HEX_ID
+  bucket: BUCKET_NAME
+  tags:
+    source: HA
+  tags_attributes:
+    - friendly_name
+  default_measurement: units
+  exclude:
+    entities:
+      - zone.home
+    domains:
+      - persistent_notification
+      - person
+  include:
+    domains:
+      - sensor
+      - binary_sensor
+      - sun
+    entities:
+      - weather.home
 ```
 
 Restart Home Assistant.
 
-You should now see the data flowing into InfluxDB by visiting the web-interface
-and using the Data Explorer.
+You should now see the data flowing into InfluxDB by visiting the web-interface and using the Data Explorer.
 
 Full details of the Home Assistant integration can be found here:
 
@@ -153,27 +87,37 @@ Full details of the Home Assistant integration can be found here:
 
 ## Known issues and limitations
 
-- While the Chronograph interface supports SSL, currently, the add-on does
-  not support having SSL on InfluxDB. This limitation is caused by
-  Chronograf and we are still looking into a proper solution for this.
+- No SSL.
+- This InfluxDB v2 addon currently does not support Home Assistant web access, in other terms the ingress. Reason is that InfluxDB v2 does not support path-based reverse proxies, leading to technical challenges.
 
-## Changelog & Releases
+## FAQ
 
-This repository keeps a change log using [GitHub's releases][releases]
-functionality.
+### Migrating from InfluxDB v1 to v2 (intermediate difficult level)
 
-Releases are based on [Semantic Versioning][semver], and use the format
-of `MAJOR.MINOR.PATCH`. In a nutshell, the version will be incremented
-based on the following:
+To migrate from InfluxDB (hass community addon), easiest is to use [Advanced SSH & Web Terminal
+](https://home.danieloldberg.se/hassio/addon/a0d7b954_ssh/info) addon with Protection mode disabled. You're then able to execute docker commands with elevated permissions.
 
-- `MAJOR`: Incompatible or major changes.
-- `MINOR`: Backwards-compatible new features and enhancements.
-- `PATCH`: Backwards-compatible bugfixes and package updates.
+**Please note**: Using the following mentioned methods may impact and/or destroy your entire Home Assistant installation if you don't know what you're doing. Please take appropriate precautions like backups and reading up on the machanics before proceeding.
+
+```bash
+docker ps -a # Descibe the containers running and finding the Ids.
+docker exec -it {{ addon_xxxxx_influxdb }} /bin/bash # Enter the v1 container. Replace addon_xxxxx_influxdb with the v1 Id
+influx_inspect export -database homeassistant -retention autogen -out /data/exports/influxdb -lponly -datadir /data/influxb -waldir /data/influxdb/wal # Export the influxdb timeseries data
+exit # Exit container to host
+docker cp {{ addon_xxxxx_influxdb }}:/data/exports/influxdb /root/ # Copy the backup to host
+docker cp /root/influxdb {{ addon_xxxxx_influxdbv2 }}:/data/imports # Copy the backup to the v2 container (Make sure it's started)
+docker exec -it {{ addon_xxxxx_influxdbv2 }} /bin/bash # Enter the v2 container. Replace addon_xxxxx_influxdbv2 with the v2 Id
+influx write \
+  --org-id homeassistant \
+  --bucket homeassistant \
+  --file /data/imports \
+  --token {{ TOKEN }} # Replace {{ TOKEN }} with your homeassistant/operator token.
+```
 
 ## Authors & contributors
 
 Author of this repository is [Daniel Oldberg](https://github.com/danieloldberg/).
-Huge credits to Franck Nijhof and Home assistant community for their work on the original InfluxDB project that was used as a baseline.
+Huge credits to Franck Nijhof and Home assistant community for their work on the original InfluxDB project that was used as a foundation.
 
 ## License
 
@@ -200,14 +144,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [addon-badge]: https://my.home-assistant.io/badges/supervisor_addon.svg
-[addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository
-[contributors]: https://github.com/hassio-addons/addon-influxdb/graphs/contributors
-[discord-ha]: https://discord.gg/c5DvZ4e
-[discord]: https://discord.me/hassioaddons
-[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
+[addon]: https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fdanieloldberg%2Faddon-influxdbv2
 [forum]: https://community.home-assistant.io/t/home-assistant-community-add-on-influxdb/54491?u=frenck
-[frenck]: https://github.com/frenck
-[issue]: https://github.com/hassio-addons/addon-influxdb/issues
+[issue]: https://github.com/danieloldberg/addon-influxdbv2/issues
 [reddit]: https://reddit.com/r/homeassistant
-[releases]: https://github.com/hassio-addons/addon-influxdb/releases
-[semver]: https://semver.org/spec/v2.0.0.html

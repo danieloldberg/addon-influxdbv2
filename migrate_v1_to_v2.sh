@@ -4,6 +4,7 @@ exit
 docker cp {{ addon_xxxxx_influxdb }}:/data/exports/influxdb /root/
 docker cp /root/influxdb {{ addon_xxxxx_influxdbv2 }}:/data/imports
 docker exec -it {{ addon_xxxxx_influxdbv2 }} /bin/bash
+
 influx write \
   --org-id homeassistant \
   --bucket homeassistant \
