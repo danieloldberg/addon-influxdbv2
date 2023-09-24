@@ -20,12 +20,37 @@ Data Explorer.
 
 ## Known issues and limitations
 
+- No SSL.
 - This InfluxDB v2 addon currently does not support Home Assistant web access, in other terms the ingress. Reason is that InfluxDB v2 does not support path-based reverse proxies, leading to technical challenges.
+
+## FAQ
+
+### Migrating from InfluxDB v1 to v2 (intermediate difficult level)
+
+To migrate from InfluxDB (hass community addon), easiest is to use [Advanced SSH & Web Terminal
+](https://home.danieloldberg.se/hassio/addon/a0d7b954_ssh/info) addon with Protection mode disabled. You're then able to execute docker commands with elevated permissions.
+
+**Please note**: Using the following mentioned methods may impact and/or destroy your entire Home Assistant installation if you don't know what you're doing. Please take appropriate precautions like backups and reading up on the machanics before proceeding.
+
+```bash
+docker ps -a # Descibe the containers running and finding the Ids.
+docker exec -it {{ addon_xxxxx_influxdb }} /bin/bash # Enter the v1 container. Replace addon_xxxxx_influxdb with the v1 Id
+influx_inspect export -database homeassistant -retention autogen -out /data/exports/influxdb -lponly -datadir /data/influxb -waldir /data/influxdb/wal # Export the influxdb timeseries data
+exit # Exit container to host
+docker cp {{ addon_xxxxx_influxdb }}:/data/exports/influxdb /root/ # Copy the backup to host
+docker cp /root/influxdb {{ addon_xxxxx_influxdbv2 }}:/data/imports # Copy the backup to the v2 container (Make sure it's started)
+docker exec -it {{ addon_xxxxx_influxdbv2 }} /bin/bash # Enter the v2 container. Replace addon_xxxxx_influxdbv2 with the v2 Id
+influx write \
+  --org-id homeassistant \
+  --bucket homeassistant \
+  --file /data/imports \
+  --token {{ TOKEN }} # Replace {{ TOKEN }} with your homeassistant/operator token.
+```
 
 ## Authors & contributors
 
 Author of this repository is [Daniel Oldberg](https://github.com/danieloldberg/).
-Huge credits to Franck Nijhof and Home assistant community for their work on the original InfluxDB project that was used as a baseline.
+Huge credits to Franck Nijhof and Home assistant community for their work on the original InfluxDB project that was used as the foundation.
 
 ## License
 
