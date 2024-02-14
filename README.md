@@ -35,16 +35,19 @@ To migrate from InfluxDB (hass community addon), easiest is to use [Advanced SSH
 ```bash
 docker ps -a # Descibe the containers running and finding the Ids.
 docker exec -it {{ addon_xxxxx_influxdb }} /bin/bash # Enter the v1 container. Replace addon_xxxxx_influxdb with the v1 Id
-influx_inspect export -database homeassistant -retention autogen -out /data/exports/influxdb -lponly -datadir /data/influxb -waldir /data/influxdb/wal # Export the influxdb timeseries data
+influx_inspect export -compress -database homeassistant -out /data/exports/influxdb.gz -lponly -datadir /data/influxdb/data -waldir /data/influxdb/wal # Export the influxdb timeseries data
 exit # Exit container to host
-docker cp {{ addon_xxxxx_influxdb }}:/data/exports/influxdb /root/ # Copy the backup to host
-docker cp /root/influxdb {{ addon_xxxxx_influxdbv2 }}:/data/imports # Copy the backup to the v2 container (Make sure it's started)
+docker cp {{ addon_xxxxx_influxdb }}:/data/exports/influxdb.gz /root/ # Copy the backup to host
+docker cp /root/influxdb.gz {{ addon_xxxxx_influxdbv2 }}:/data/influxdb.gz # Copy the backup to the v2 container (Make sure it's started)
 docker exec -it {{ addon_xxxxx_influxdbv2 }} /bin/bash # Enter the v2 container. Replace addon_xxxxx_influxdbv2 with the v2 Id
 influx write \
   --org-id homeassistant \
   --bucket homeassistant \
-  --file /data/imports \
+  --file /data/influxdb.gz \
   --token {{ TOKEN }} # Replace {{ TOKEN }} with your homeassistant/operator token.
+rm /data/influxdb.gz # Remove backup from v2 container
+exit
+rm /influxdb.gz # Remove backup from host
 ```
 
 ## Authors & contributors
